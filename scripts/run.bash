@@ -4,7 +4,7 @@ CONTAINER=$2
 WS="${3:-"ws"}"
 
 # The directory from which script has been run
-SIM_ROOT="$( cd "$( dirname "${BASH_SOURCE[0]}" )/../.." && pwd )"
+SIM_ROOT="$( cd "$( dirname "${BASH_SOURCE[0]}" )/.." && pwd )"
 echo "Path to ${WS} volume folder: ${SIM_ROOT}/${WS}"
 
 # TODO: делать xhost -local:docker после удаления контейнера
