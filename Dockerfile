@@ -1,4 +1,4 @@
-FROM osrf/ros:jazzy-desktop-full
+FROM osrf/ros:humble-desktop-full
 
 ARG DEBIAN_FRONTEND=noninteractive
 
@@ -7,12 +7,9 @@ ARG USERNAME=ubuntu
 ARG USER_UID=1000
 ARG USER_GID=$USER_UID
 
-# RUN groupadd --gid $USER_GID $USERNAME \
-#     && useradd -s /bin/bash --uid $USER_UID --gid $USER_GID -m $USERNAME \
-#     && mkdir /home/$USERNAME/.config && chown $USER_UID:$USER_GID /home/$USERNAME/.config
-
-# RUN useradd -s /bin/bash --uid $USER_UID --gid $USER_GID -m $USERNAME \
-#     && mkdir /home/$USERNAME/.config && chown $USER_UID:$USER_GID /home/$USERNAME/.config
+RUN groupadd --gid $USER_GID $USERNAME \
+    && useradd -s /bin/bash --uid $USER_UID --gid $USER_GID -m $USERNAME \
+    && mkdir /home/$USERNAME/.config && chown $USER_UID:$USER_GID /home/$USERNAME/.config
 
 # set up sudo privileges
 RUN apt-get update \
@@ -29,10 +26,42 @@ RUN apt update && sudo apt install locales \
     && update-locale LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8 \
     && LANG=en_US.UTF-8
 
-# Необходимые пакеты
-RUN apt install python3-pip python3-colcon-common-extensions
-RUN pip3 install setuptools --break-system-packages
+# Необходимые системные утилиты
+RUN apt-get install -y \
+    vim git wget curl zip unzip x11-apps \
+    python3-pip python3-colcon-common-extensions python3-argcomplete bash-completion \
+    cmake g++
 
+RUN pip3 install setuptools rosbags
+
+# ROS пакеты
+RUN apt install -y ros-humble-rosbag2-storage-mcap ros-humble-kobuki-ros-interfaces
+
+# PCL
+RUN apt install libpcl-dev
+
+#Eigen 
+# download and unpack sources, there is no need to install
+RUN wget -O eigen.zip https://gitlab.com/libeigen/eigen/-/archive/3.4.0/eigen-3.4.0.zip \
+    && unzip /eigen.zip \
+    && cp -r /eigen-3.4.0/Eigen /usr/local/include \
+    && rm /eigen.zip \
+    && rm -rf /eigen-3.4.0
+
+# Luvox SDK
+RUN git clone https://github.com/Livox-SDK/Livox-SDK2.git \
+    && cd ./Livox-SDK2/ \
+    && mkdir build \
+    && cd ./build \
+    && cmake .. && make -j \
+    && make install
+RUN 
+
+# Livox ROS Driver 2
+# WORKDIR /
+# RUN mkdir ws_livox && git clone https://github.com/Livox-SDK/livox_ros_driver2.git ws_livox/src/livox_ros_driver2
+
+    
 COPY scripts/.bashrc /home/${USERNAME}/bashrc
 RUN cat /home/${USERNAME}/bashrc >> /home/${USERNAME}/.bashrc && rm /home/${USERNAME}/bashrc
 
