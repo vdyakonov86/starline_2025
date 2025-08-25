@@ -1,4 +1,4 @@
-FROM osrf/ros:humble-desktop-full
+FROM osrf/ros:noetic-desktop-full
 
 ARG DEBIAN_FRONTEND=noninteractive
 
@@ -35,7 +35,7 @@ RUN apt-get install -y \
 RUN pip3 install setuptools rosbags
 
 # ROS пакеты
-RUN apt install -y ros-humble-rosbag2-storage-mcap ros-humble-kobuki-ros-interfaces
+# RUN apt install -y ros-noetic-rosbag2-storage-mcap ros-noetic-kobuki-ros-interfaces
 
 # PCL
 RUN apt install libpcl-dev
@@ -49,13 +49,11 @@ RUN wget -O eigen.zip https://gitlab.com/libeigen/eigen/-/archive/3.4.0/eigen-3.
     && rm -rf /eigen-3.4.0
 
 # Luvox SDK
-RUN git clone https://github.com/Livox-SDK/Livox-SDK2.git \
-    && cd ./Livox-SDK2/ \
-    && mkdir build \
+RUN git clone https://github.com/Livox-SDK/Livox-SDK.git \
+    && cd ./Livox-SDK/ \
     && cd ./build \
-    && cmake .. && make -j \
+    && cmake .. && make \
     && make install
-RUN 
 
 # Livox ROS Driver 2
 # WORKDIR /
