@@ -1,0 +1,7 @@
+bag_files
+build
+install
+log
+.vscode
+*.pdf
+devel
