@@ -38,7 +38,7 @@ RUN pip3 install setuptools rosbags
 RUN apt install -y ros-humble-rosbag2-storage-mcap ros-humble-kobuki-ros-interfaces
 
 # PCL
-RUN apt install libpcl-dev
+RUN apt install libpcl-dev pcl-tools
 
 #Eigen 
 # download and unpack sources, there is no need to install
@@ -70,6 +70,6 @@ RUN rm -rf /var/lib/apt/lists/*
 
 # switch from root to user
 USER $USERNAME
-WORKDIR /ws
+WORKDIR /starline
 
 CMD ["bash"]
