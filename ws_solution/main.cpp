@@ -1,6 +1,8 @@
+#include <iostream>
+
 #include "PcdLoader.hpp"
 #include "PcdVisualizer.hpp"
-#include <iostream>
+#include "PcdFilter.hpp"
 
 int main(int argc, char** argv)
 {
@@ -18,6 +20,9 @@ int main(int argc, char** argv)
 
     auto cloud = loader.get();
 
+    PcdFilter pcdFilter(165, 255);
+    auto cloud_intencity_filtered = pcdFilter.filter(cloud);
+
     PcdVisualizer visualizer;
 
     // пример: переключение режима
@@ -26,7 +31,7 @@ int main(int argc, char** argv)
     // visualizer.spin();
 
     std::cout << "Displaying by intensity..." << std::endl;
-    visualizer.showCloud(cloud, DisplayMode::Intensity);
+    visualizer.showCloud(cloud_intencity_filtered, DisplayMode::Intensity);
     visualizer.spin();
 
     // std::cout << "Displaying by height..." << std::endl;
