@@ -1,5 +1,6 @@
 #include "PcdLoader.hpp"
-#include <pcl/visualization/pcl_visualizer.h>
+#include "PcdVisualizer.hpp"
+#include <iostream>
 
 int main(int argc, char** argv)
 {
@@ -17,14 +18,20 @@ int main(int argc, char** argv)
 
     auto cloud = loader.get();
 
-    // Визуализация
-    pcl::visualization::PCLVisualizer viewer("PCD Viewer");
-    viewer.addPointCloud<pcl::PointXYZI>(cloud, "cloud");
+    PcdVisualizer visualizer;
 
-    while (!viewer.wasStopped())
-    {
-        viewer.spinOnce(100);
-    }
+    // пример: переключение режима
+    // std::cout << "Displaying default color..." << std::endl;
+    // visualizer.showCloud(cloud, DisplayMode::Default);
+    // visualizer.spin();
+
+    std::cout << "Displaying by intensity..." << std::endl;
+    visualizer.showCloud(cloud, DisplayMode::Intensity);
+    visualizer.spin();
+
+    // std::cout << "Displaying by height..." << std::endl;
+    // visualizer.showCloud(cloud, DisplayMode::Height);
+    // visualizer.spin();
 
     return 0;
 }
