@@ -4,8 +4,8 @@ project(pcd_detection)
 
 find_package(PCL 1.2 REQUIRED)
 
-set(SRC src/PcdLoader.cpp src/PcdVisualizer.cpp src/PcdFilter.cpp)
-set(INCLUDE include/PcdLoader.hpp include/PcdVisualizer.hpp include/PcdFilter.hpp)
+set(SRC src/PcdLoader.cpp src/PcdVisualizer.cpp src/PcdFilter.cpp src/PcdCluster.cpp)
+set(INCLUDE include/PcdLoader.hpp include/PcdVisualizer.hpp include/PcdFilter.hpp include/PcdCluster.hpp)
 
 add_executable (main main.cpp ${SRC} ${INCLUDE})
 

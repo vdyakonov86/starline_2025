@@ -8,8 +8,6 @@ PcdVisualizer::PcdVisualizer()
 
 void PcdVisualizer::showCloud(pcl::PointCloud<pcl::PointXYZI>::Ptr cloud, DisplayMode mode)
 {
-    viewer->removeAllPointClouds();
-
     pcl::visualization::PointCloudColorHandlerGenericField<pcl::PointXYZI> intensity(cloud, "intensity");
     pcl::visualization::PointCloudColorHandlerGenericField<pcl::PointXYZI> height(cloud, "z");
     pcl::visualization::PointCloudColorHandlerCustom<pcl::PointXYZI> white(cloud, 255, 255, 255);
@@ -37,6 +35,24 @@ void PcdVisualizer::showCloud(pcl::PointCloud<pcl::PointXYZI>::Ptr cloud, Displa
     }
 
     viewer->resetCamera();
+}
+
+void::PcdVisualizer::showClouds(std::vector<pcl::PointCloud<pcl::PointXYZI>::Ptr> clouds) {
+    int cloud_id = 0;
+    for (const auto& cloud : clouds)
+    {
+        pcl::visualization::PointCloudColorHandlerRandom<pcl::PointXYZI> color(cloud);
+        std::string cloud_name = "cloud_" + std::to_string(cloud_id);
+        viewer->addPointCloud<pcl::PointXYZI>(cloud, color, cloud_name);
+        viewer->setPointCloudRenderingProperties(pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 3, cloud_name);
+        cloud_id++;
+    }
+
+    viewer->resetCamera();
+}
+
+void PcdVisualizer::clear() {
+    viewer->removeAllPointClouds();
 }
 
 void PcdVisualizer::spin()

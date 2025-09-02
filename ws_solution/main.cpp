@@ -3,6 +3,7 @@
 #include "PcdLoader.hpp"
 #include "PcdVisualizer.hpp"
 #include "PcdFilter.hpp"
+#include "PcdCluster.hpp"
 
 int main(int argc, char** argv)
 {
@@ -12,6 +13,7 @@ int main(int argc, char** argv)
         return -1;
     }
 
+    // Pcd load
     PcdLoader loader;
     if (!loader.load(argv[1]))
     {
@@ -20,23 +22,21 @@ int main(int argc, char** argv)
 
     auto cloud = loader.get();
 
+    // Filtering
     PcdFilter pcdFilter(165, 255);
     auto cloud_intencity_filtered = pcdFilter.filter(cloud);
 
+    // Clusterization
+    PcdCluster pcdCluster;
+    auto cloud_clusters = pcdCluster.cluster(cloud_intencity_filtered);
+
+    // Visualization
     PcdVisualizer visualizer;
+    // visualizer.showCloud(cloud, DisplayMode::Intensity);
+    // visualizer.showCloud(cloud_intencity_filtered, DisplayMode::Default);
 
-    // пример: переключение режима
-    // std::cout << "Displaying default color..." << std::endl;
-    // visualizer.showCloud(cloud, DisplayMode::Default);
-    // visualizer.spin();
-
-    std::cout << "Displaying by intensity..." << std::endl;
-    visualizer.showCloud(cloud_intencity_filtered, DisplayMode::Intensity);
+    visualizer.showClouds(cloud_clusters);
     visualizer.spin();
-
-    // std::cout << "Displaying by height..." << std::endl;
-    // visualizer.showCloud(cloud, DisplayMode::Height);
-    // visualizer.spin();
 
     return 0;
 }
