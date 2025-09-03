@@ -15,11 +15,13 @@ class PcdAnalyzer {
     PcdAnalyzer();
 
     ClusterFeatures analyzePca(const pcl::PointCloud<pcl::PointXYZI>::Ptr &cloud);
-    // Проверка "крестик или нет"
+
     bool isCross(
       const ClusterFeatures& f,
       float expected_height,
       float expected_width,
       float max_thickness,
       float tol = 0.2);
+    
+    Eigen::Vector4f findCrossCentroid(const pcl::PointCloud<pcl::PointXYZI>::Ptr &cloud);
 };

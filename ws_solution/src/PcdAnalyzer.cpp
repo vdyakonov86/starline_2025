@@ -65,3 +65,10 @@ bool PcdAnalyzer::isCross(
     return true;
 }
 
+Eigen::Vector4f
+PcdAnalyzer::findCrossCentroid(const pcl::PointCloud<pcl::PointXYZI>::Ptr &cloud) {
+    Eigen::Vector4f centroid;
+    pcl::compute3DCentroid(*cloud, centroid);
+
+    return centroid;
+}

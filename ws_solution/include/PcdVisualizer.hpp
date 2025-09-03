@@ -17,6 +17,10 @@ public:
     PcdVisualizer();
     void showCloud(pcl::PointCloud<pcl::PointXYZI>::Ptr cloud, DisplayMode mode);
     void showClouds(std::vector<pcl::PointCloud<pcl::PointXYZI>::Ptr> clouds);
+    void showCloudWithCenter(
+        const pcl::PointCloud<pcl::PointXYZI>::Ptr &cloud,
+        const std::string &cloud_id,
+        const Eigen::Vector3f &center);
     void clear();
     void spin();
 };
