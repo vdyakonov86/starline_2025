@@ -4,6 +4,7 @@
 #include "PcdVisualizer.hpp"
 #include "PcdFilter.hpp"
 #include "PcdCluster.hpp"
+#include "PcdAnalyzer.hpp"
 #include "PcdExport.hpp"
 #include <pcl/common/common.h>
 
@@ -59,12 +60,26 @@ int main(int argc, char** argv)
     auto cloud_clusters = pcdCluster.cluster(cloud_intencity_filtered);
 
     // Filter cloud by cross geometry
-    auto cloud_clusters_geometry_filtered = filter_by_geometry(cloud_clusters);
+    // auto cloud_clusters_geometry_filtered = filter_by_geometry(cloud_clusters);
+    const float H = 170 / 1000; 
+    const float T = 50 / 1000;
 
+    std::vector<pcl::PointCloud<pcl::PointXYZI>::Ptr> cloud_clusters_pca_filtered;
+    PcdAnalyzer pcdAnalyzer;
+    for (const auto &cld: cloud_clusters) {
+        ClusterFeatures features = pcdAnalyzer.analyzePca(cld);
+        bool is_cross = pcdAnalyzer.isCross(features, H, H, T);
+
+        if (is_cross) {
+            cloud_clusters_pca_filtered.push_back(cld);
+        }
+    }
+
+    std::cout << "cloud_clusters_pca_filtered: " << cloud_clusters_pca_filtered.size() << std::endl;
 
     pcl::PointCloud<pcl::PointXYZI>::Ptr cloud_merged(new pcl::PointCloud<pcl::PointXYZI>);
 
-    for (const auto &cld: cloud_clusters_geometry_filtered) {
+    for (const auto &cld: cloud_clusters_pca_filtered) {
         *cloud_merged = *cloud_merged + *cld;
     }
 
@@ -77,7 +92,7 @@ int main(int argc, char** argv)
     // visualizer.showCloud(cloud, DisplayMode::Intensity);
     // visualizer.showCloud(cloud_intencity_filtered, DisplayMode::Default);
 
-    visualizer.showClouds(cloud_clusters_geometry_filtered);
+    visualizer.showClouds(cloud_clusters_pca_filtered);
     visualizer.spin();
 
     return 0;
