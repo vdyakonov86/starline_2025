@@ -52,23 +52,27 @@ int main(int argc, char** argv)
     auto cloud = loader.get();
 
     // Filter cloud by intensity
-    PcdFilter pcdFilter(165, 255);
+    PcdFilter pcdFilter(120, 255);
     auto cloud_intencity_filtered = pcdFilter.filter(cloud);
 
-    // Clusterization
+    std::cout << "Clusterization" << std::endl;
     PcdCluster pcdCluster;
     auto cloud_clusters = pcdCluster.cluster(cloud_intencity_filtered);
+    std::cout << "cloud_clusters: " << cloud_clusters.size() << std::endl;
 
     // Filter cloud by cross geometry
     // auto cloud_clusters_geometry_filtered = filter_by_geometry(cloud_clusters);
-    const float H = 170 / 1000; 
-    const float T = 50 / 1000;
+    const float cross_h = 170 / 1000.0; 
+    const float cross_w = 170 / 1000.0; 
+    const float cross_thick = 0.05;
+    const float tolerance = 0.2;
 
     std::vector<pcl::PointCloud<pcl::PointXYZI>::Ptr> cloud_clusters_pca_filtered;
+    std::cout << "Analyze PCA" << std::endl;
     PcdAnalyzer pcdAnalyzer;
     for (const auto &cld: cloud_clusters) {
         ClusterFeatures features = pcdAnalyzer.analyzePca(cld);
-        bool is_cross = pcdAnalyzer.isCross(features, H, H, T);
+        bool is_cross = pcdAnalyzer.isCross(features, cross_h, cross_w, cross_thick, tolerance);
 
         if (is_cross) {
             cloud_clusters_pca_filtered.push_back(cld);

@@ -20,6 +20,6 @@ class PcdAnalyzer {
       const ClusterFeatures& f,
       float expected_height,
       float expected_width,
-      float expected_thickness,
-      float tol = 20);
+      float max_thickness,
+      float tol = 0.2);
 };

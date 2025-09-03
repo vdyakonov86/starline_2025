@@ -11,7 +11,7 @@ PcdCluster::cluster(const pcl::PointCloud<pcl::PointXYZI>::ConstPtr& cloud) {
 
   std::vector<pcl::PointIndices> cluster_indices;
   pcl::EuclideanClusterExtraction<pcl::PointXYZI> ec;
-  ec.setClusterTolerance(0.1);   // расстояние в метрах между точками в кластере
+  ec.setClusterTolerance(0.02);   // расстояние в метрах между точками в кластере
   ec.setMinClusterSize(30);      // минимальное количество точек в кластере
   ec.setMaxClusterSize(10000);   // максимальное количество точек в кластере
   ec.setSearchMethod(tree);

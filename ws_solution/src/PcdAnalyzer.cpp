@@ -32,17 +32,36 @@ PcdAnalyzer::analyzePca(const pcl::PointCloud<pcl::PointXYZI>::Ptr &cloud) {
     return features;
 }
 
-// Проверка "крестик или нет"
-bool PcdAnalyzer::isCross(const ClusterFeatures& f,
-             float expected_height,
-             float expected_width,
-             float expected_thickness,
-             float tol) {
-    float h = f.sizes[0];
-    float w = f.sizes[1];
-    float t = f.sizes[2];
+bool PcdAnalyzer::isCross(
+    const ClusterFeatures& f,
+    float expected_height,
+    float expected_width,
+    float max_thickness,
+    float tol)
+{
+    float size_max = f.sizes[0]; // высота крестика
+    float size_mid = f.sizes[1]; // ширина бруса
+    float size_min = f.sizes[2]; // толщина
 
-    return (fabs(h - expected_height) / expected_height < tol) &&
-           (fabs(w - expected_width) / expected_width < tol) &&
-           (t < expected_thickness * (1.0 + tol));
+    // 1. Проверка "плоский объект"
+    if (size_min > max_thickness) {
+        return false;
+    }
+
+    // 2. Проверка размеров на соответствие эталону (с допуском tol)
+    auto within_tol = [tol](float value, float expected) {
+        return std::fabs(value - expected) / expected <= tol;
+    };
+
+    if (!within_tol(size_max, expected_height)) return false;
+    if (!within_tol(size_mid, expected_width)) return false;
+
+    // 3. Проверка симметрии H и W (чтобы отбросить прямоугольники)
+    float ratio = size_max / size_mid;
+    if (ratio > 1.0f + tol) {
+        return false;
+    }
+
+    return true;
 }
+
