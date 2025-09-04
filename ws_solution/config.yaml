@@ -1,0 +1,18 @@
+filter_intensity:
+  min: 120.0
+  max: 255.0
+
+clustering:
+  tolerance: 0.02 # in meters
+  min_size: 50
+  max_size: 10000
+
+pca:
+  tolerance: 0.2 # in percents
+
+cross_params:
+  width: 0.17
+  height: 0.17
+  thickness: 0.05
+
+

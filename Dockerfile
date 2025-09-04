@@ -89,7 +89,14 @@ RUN git clone https://github.com/Livox-SDK/Livox-SDK2.git \
 # WORKDIR /
 # RUN mkdir ws_livox && git clone https://github.com/Livox-SDK/livox_ros_driver2.git ws_livox/src/livox_ros_driver2
 
-    
+
+# yaml-cpp
+RUN git clone https://github.com/jbeder/yaml-cpp.git \
+    && cd yaml-cpp \
+    && mkdir build && cd build \
+    && cmake .. \
+    && make && make install
+
 COPY scripts/.bashrc /home/${USERNAME}/bashrc
 RUN cat /home/${USERNAME}/bashrc >> /home/${USERNAME}/.bashrc && rm /home/${USERNAME}/bashrc
 

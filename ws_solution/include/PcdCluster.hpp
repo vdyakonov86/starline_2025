@@ -12,5 +12,10 @@ public:
     PcdCluster();
 
     std::vector<pcl::PointCloud<pcl::PointXYZI>::Ptr>
-    cluster(const pcl::PointCloud<pcl::PointXYZI>::ConstPtr& cloud);
+    cluster(
+        const pcl::PointCloud<pcl::PointXYZI>::ConstPtr& cloud,
+        float tolerance = 0.02,
+        int min_size = 30,
+        int max_size = 10000
+    );
 };

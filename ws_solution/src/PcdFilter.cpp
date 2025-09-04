@@ -1,20 +1,20 @@
 #include "PcdFilter.hpp"
 
-PcdFilter::PcdFilter(float min_intensity, float max_intensity)
-    : min_intensity_(min_intensity), max_intensity_(max_intensity) {}
+PcdFilter::PcdFilter() {}
 
 pcl::PointCloud<pcl::PointXYZI>::Ptr
-PcdFilter::filter(const pcl::PointCloud<pcl::PointXYZI>::ConstPtr& input_cloud)
+PcdFilter::filterByIntensity(
+    const pcl::PointCloud<pcl::PointXYZI>::ConstPtr& input_cloud,
+    const float &min,
+    const float &max)
 {
     auto output_cloud = std::make_shared<pcl::PointCloud<pcl::PointXYZI>>();
     output_cloud->reserve(input_cloud->size());
 
     for (const auto& point : *input_cloud)
     {
-        if (point.intensity >= min_intensity_ && point.intensity <= max_intensity_)
-        {
+        if (point.intensity >= min && point.intensity <= max)
             output_cloud->push_back(point);
-        }
     }
 
     output_cloud->width = static_cast<uint32_t>(output_cloud->size());

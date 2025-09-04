@@ -7,12 +7,11 @@
 class PcdFilter
 {
 public:
-    PcdFilter(float min_intensity, float max_intensity);
+    PcdFilter();
 
-    pcl::PointCloud<pcl::PointXYZI>::Ptr filter(
-        const pcl::PointCloud<pcl::PointXYZI>::ConstPtr& input_cloud);
-
-private:
-    float min_intensity_;
-    float max_intensity_;
+    pcl::PointCloud<pcl::PointXYZI>::Ptr 
+    filterByIntensity(
+        const pcl::PointCloud<pcl::PointXYZI>::ConstPtr& input_cloud,
+        const float &min,
+        const float &max);
 };
